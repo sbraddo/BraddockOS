@@ -5,24 +5,30 @@
 #include <unistd.h>
 #include <stdbool.h>
 
-bool sig = true;
+bool sig = false;
 int status;
+ 
 
-void handler(int signum)
+void alarmhandler(int signum)
 { //signal handler
   printf("Hello World!\n");
-  alarm(1);
+  sig = true;
+  alarm(3);
   //exit(1); //exit after printing
   //wait(0);
 }
 
 int main(int argc, char * argv[])
 {
-  signal(SIGALRM,handler); //register handler to handle SIGALRM
-  alarm(1); //Schedule a SIGALRM for 1 second
-  while(sig){
-    sleep(1);
-    printf("Turning was right!\n");
-  } //busy wait for signal to be delivered
+  signal(SIGALRM, alarmhandler); //register handler to handle SIGALRM
+  alarm(3); //Schedule a SIGALRM for 1 second
+
+  while(1) {
+      sig = false;
+      while(sig == false);
+      //sig = false;
+      printf("Turning was right!\n");
+      //busy wait for signal to be delivered
+  }
   return 0; //never reached
 }
