@@ -11,6 +11,9 @@
  *
  */
 
+ //set up another pipe where p2 writes to the 
+ //right side and p1 reads from the read side
+
 int main(int argc, char **argv)
 {
   int pipefd[2];
@@ -19,8 +22,8 @@ int main(int argc, char **argv)
   int pid2;
 
   char *cat_args[] = {"cat", "scores", NULL};
-  char *grep_args[] = {"grep", "Lakers", NULL};
-  char *sort_args[] = {"sort", NULL};
+  char *grep_args[] = {"grep", argv[1], NULL};
+  char *sort_args[] = {"sort", NULL, NULL};
 
   // make a pipe (fds go in pipefd[0] and pipefd[1])
 
@@ -32,8 +35,6 @@ int main(int argc, char **argv)
     fprintf(stderr,"Pipe Failed");
     return 1;
   }
-
-  pipe(pipefd);
 
   pid = fork();
 
